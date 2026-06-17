@@ -1,16 +1,17 @@
 package biblioteca;
+import java.util.ArrayList;
 
 public class ListaEncadeadaArrayList<T> implements IColecao<T> {
 
-    private ListaEncadeadaArrayList<T> lista;
+    private ArrayList<T> lista;
 
     public ListaEncadeadaArrayList() {
-        this.lista = new ListaEncadeadaArrayList<>();
+        this.lista = new ArrayList<>();
     }
 
     @Override
     public void adicionar(T novoValor) {
-        this.lista.add(0, novoValor);
+        this.lista.addFirst(novoValor);
     }
 
     @Override
