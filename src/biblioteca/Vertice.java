@@ -3,13 +3,15 @@ package biblioteca;
 public class Vertice<T> {
     private T valor;
     private final ListaEncadeadaArrayList<Aresta<T>> arestas; // Lista contendo as arestas conectadas a este vértice
+    private final ListaEncadeadaArrayList<Vertice<T>> vertices;
 
     public Vertice(T valor) {
         this.valor = valor;
         this.arestas = new ListaEncadeadaArrayList<>();
+        this.vertices = new ListaEncadeadaArrayList<>();
     }
 
-    public T getValor() { // devolve o objeto do tipo T presente no vértice
+    public T getValor() {
         return valor;
     }
 
@@ -17,8 +19,21 @@ public class Vertice<T> {
         this.valor = valor;
     }
 
-    public ListaEncadeadaArrayList<Aresta<T>> getArestas() { // descobre as arestas conectadas a este vértice
-        return arestas;
+    public ListaEncadeadaArrayList<Aresta<T>> getArestas() { return arestas;
     }
 
+    public Vertice<T> adicionarVertice (T valor) {
+        Vertice<T> novo = new Vertice<T>(valor);
+        this.vertices.adicionar(novo);
+        return novo;
+    }
+
+    private Vertice<T> ObterVertice(T valor){
+        Vertice<T> v;
+        for (int i=0; i<this.vertices.quantidadeNos();i++) {
+            v= this.vertices.get(i);
+            if(v.getValor().equals(valor)) { return v;}
+        }
+        return null;
+    }
 }

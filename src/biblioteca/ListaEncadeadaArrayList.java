@@ -38,4 +38,11 @@ public class ListaEncadeadaArrayList<T> implements IColecao<T> {
     public String toString () {
         return this.lista.toString();
     }
+
+    public T get(int indice) {
+        if (indice >= 0 && indice < this.lista.size()) {
+            return this.lista.get(indice);
+        }
+        return null;
+    }
 }
