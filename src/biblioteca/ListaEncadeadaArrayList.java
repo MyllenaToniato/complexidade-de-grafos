@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class ListaEncadeadaArrayList<T> implements IColecao<T> {
 
-    private ArrayList<T> lista;
+    private final ArrayList<T> lista;
 
     public ListaEncadeadaArrayList() {
         this.lista = new ArrayList<>();

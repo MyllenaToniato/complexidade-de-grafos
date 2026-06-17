@@ -1,9 +1,9 @@
 package biblioteca;
 
 public class Aresta<T> {
-    private Vertice<T> vertice1;
-    private Vertice<T> vertice2;
-    private int tempo;
+    private final Vertice<T> vertice1;
+    private final Vertice<T> vertice2;
+    private final int tempo;
 
     public Aresta(Vertice<T> vertice1, Vertice<T> vertice2, int tempo) {
         this.vertice1 = vertice1;

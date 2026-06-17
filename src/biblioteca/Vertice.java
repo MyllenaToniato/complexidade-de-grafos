@@ -1,8 +1,8 @@
 package biblioteca;
 
-public class Vertice<T> implements IColecao<T>{
+public class Vertice<T> {
     private T valor;
-    private ListaEncadeadaArrayList<Aresta<T>> arestas; // Lista contendo as arestas conectadas a este vértice
+    private final ListaEncadeadaArrayList<Aresta<T>> arestas; // Lista contendo as arestas conectadas a este vértice
 
     public Vertice(T valor) {
         this.valor = valor;
