@@ -3,12 +3,12 @@ package biblioteca;
 public class Vertice<T> {
     private T valor;
     private final ListaEncadeadaArrayList<Aresta<T>> arestas; // Lista contendo as arestas conectadas a este vértice
-    private final ListaEncadeadaArrayList<Vertice<T>> vertices;
+    // private final ListaEncadeadaArrayList<Vertice<T>> vertices;
 
     public Vertice(T valor) {
         this.valor = valor;
         this.arestas = new ListaEncadeadaArrayList<>();
-        this.vertices = new ListaEncadeadaArrayList<>();
+        // this.vertices = new ListaEncadeadaArrayList<>();
     }
 
     public T getValor() {
@@ -18,10 +18,17 @@ public class Vertice<T> {
     public void setValor(T valor) { // muda o conteudo y do vértice atual para um conteúdo x
         this.valor = valor;
     }
-
-    public ListaEncadeadaArrayList<Aresta<T>> getArestas() { return arestas;
+    
+    public ListaEncadeadaArrayList<Aresta<T>> getArestas() { 
+        return arestas;
     }
 
+
+    public void adicionarAresta(Aresta<T> aresta) {
+        this.aresta.adicionar(aresta);
+    }
+    
+    /*
     public Vertice<T> adicionarVertice (T valor) {
         Vertice<T> novo = new Vertice<T>(valor);
         this.vertices.adicionar(novo);
@@ -36,4 +43,5 @@ public class Vertice<T> {
         }
         return null;
     }
+    */
 }
