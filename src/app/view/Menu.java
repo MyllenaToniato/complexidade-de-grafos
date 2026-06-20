@@ -4,6 +4,7 @@ import app.data.LeitorArquivo;
 import biblioteca.Grafo;
 import java.io.IOException;
 import java.util.Scanner;
+import app.service.GerenciadorEntrega;
 
 
 public class Menu {
@@ -11,11 +12,13 @@ public class Menu {
     private final Grafo<String> grafo;
     private final LeitorArquivo leitor;
     private final Scanner scanner;
+    private final GerenciadorEntrega gerenciador;
 
     public Menu() {
         this.grafo = new Grafo<>();
         this.leitor = new LeitorArquivo();
         this.scanner = new Scanner(System.in);
+        this.gerenciador = new GerenciadorEntrega(this.grafo);
     }
 
     public void exibirMenu() {
@@ -94,30 +97,15 @@ public class Menu {
 
 
     private void calcularRotaRapida() {
-
         System.out.print("Digite o local de partida: ");
         String origem = scanner.nextLine();
 
         System.out.print("Digite o destino final: ");
         String destino = scanner.nextLine();
 
-        Grafo.ResultadoDijkstra<String> resultado = grafo.dijkstra(origem);
-        Float tempoTotal = resultado.distancias.get(destino);
-
-        if (tempoTotal == null || tempoTotal == Float.MAX_VALUE) {
-            System.out.println("Não foi possível encontrar uma rota para este destino");
-            return;
-        }
-
-        java.util.List<String> caminho = new java.util.ArrayList<>();
-        String atual = destino;
-        while (atual != null) {
-            caminho.add(0, atual);
-            atual = resultado.predecessores.get(atual);
-        }
-
-        System.out.println("\n-> Tempo total estimado: " + tempoTotal + " minutos.");
-        System.out.println("-> Rota recomendada: " + caminho);
+        // A camada de negócio resolve e a View apenas imprime
+        String relatorio = gerenciador.obterRelatorioRota(origem, destino);
+        System.out.println(relatorio);
     }
 
 }
