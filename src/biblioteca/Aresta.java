@@ -1,24 +1,19 @@
 package biblioteca;
 
 public class Aresta<T> {
-    private final Vertice<T> origem, destino;
-    private final int tempo;
+    private final Vertice<T> destino;
+    private final float tempo;
 
-    public Aresta(Vertice<T> origem, Vertice<T> destino, int tempo) {
-        this.origem = origem;
+    public Aresta(Vertice<T> destino, float tempo) {
         this.destino = destino;
         this.tempo = tempo;
     }
 
-    public Vertice<T> getVertice1() {
-        return origem;
-    }
-
-    public Vertice<T> getVertice2() {
+    public Vertice<T> getDestino() {
         return destino;
     }
 
-    public int getTempo() {
+    public float getTempo() {
         return tempo;
     }
 }

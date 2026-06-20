@@ -18,16 +18,20 @@ public class Vertice<T> {
     public void setValor(T valor) { // muda o conteudo y do vértice atual para um conteúdo x
         this.valor = valor;
     }
-    
-    public ListaEncadeadaArrayList<Aresta<T>> getArestas() { 
+
+    public ListaEncadeadaArrayList<Aresta<T>> getArestas() {
         return arestas;
     }
 
-
     public void adicionarAresta(Aresta<T> aresta) {
-        this.aresta.adicionar(aresta);
+        this.arestas.adicionar(aresta);
     }
-    
+
+    @Override
+    public String toString() {
+        return String.valueOf(valor);
+    }
+
     /*
     public Vertice<T> adicionarVertice (T valor) {
         Vertice<T> novo = new Vertice<T>(valor);

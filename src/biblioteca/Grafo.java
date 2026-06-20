@@ -1,5 +1,7 @@
 package biblioteca;
 
+import java.util.*;
+
 public class Grafo<T> {
     private final ListaEncadeadaArrayList<Vertice<T>> vertices;
 
@@ -7,7 +9,6 @@ public class Grafo<T> {
         this.vertices = new ListaEncadeadaArrayList<>();
     }
 
-    // Adiciona um novo vértice ao grafo se ele já não existir (movido de Aresta.java)
     public Vertice<T> adicionarVertice(T valor) {
         Vertice<T> existente = obterVertice(valor);
         if (existente == null) {
@@ -18,7 +19,6 @@ public class Grafo<T> {
         return existente;
     }
 
-    // Procura por um vértice na lista global através do seu valor único (movido de Aresta.java)
     public Vertice<T> obterVertice(T valor) {
         for (int i = 0; i < this.vertices.quantidadeNos(); i++) {
             Vertice<T> v = this.vertices.get(i);
@@ -29,7 +29,6 @@ public class Grafo<T> {
         return null;
     }
 
-    // Interliga dois vértices criando uma aresta ponderada direcionada 
     public void adicionarAresta(T origem, T destino, float peso) {
         Vertice<T> verticeOrigem = adicionarVertice(origem);
         Vertice<T> verticeDestino = adicionarVertice(destino);
@@ -40,5 +39,100 @@ public class Grafo<T> {
 
     public ListaEncadeadaArrayList<Vertice<T>> getVertices() {
         return vertices;
+    }
+
+    public int quantidadeVertices() {
+        return vertices.quantidadeNos();
+    }
+
+    public List<T> buscaEmLargura(T origemValor) {
+        List<T> visitados = new ArrayList<>();
+        Queue<Vertice<T>> fila = new LinkedList<>();
+        Set<Vertice<T>> marcados = new HashSet<>();
+
+        Vertice<T> inicio = obterVertice(origemValor);
+        if (inicio == null) return visitados;
+
+        fila.add(inicio);
+        marcados.add(inicio);
+
+        while (!fila.isEmpty()) {
+            Vertice<T> atual = fila.poll();
+            visitados.add(atual.getValor());
+
+            // Navegação adaptada para usar a sua ListaEncadeadaArrayList
+            ListaEncadeadaArrayList<Aresta<T>> arestas = atual.getArestas();
+            for (int i = 0; i < arestas.quantidadeNos(); i++) {
+                Aresta<T> aresta = arestas.get(i);
+                Vertice<T> vizinho = aresta.getDestino();
+
+                if (!marcados.contains(vizinho)) {
+                    marcados.add(vizinho);
+                    fila.add(vizinho);
+                }
+            }
+        }
+        return visitados;
+    }
+
+    // Classe auxiliar interna para retornar os dados do Dijkstra
+    public static class ResultadoDijkstra<T> {
+        public final Map<T, Float> distancias;
+        public final Map<T, T> predecessores;
+
+        public ResultadoDijkstra(Map<T, Float> distancias, Map<T, T> predecessores) {
+            this.distancias = distancias;
+            this.predecessores = predecessores;
+        }
+    }
+
+    public ResultadoDijkstra<T> dijkstra(T origemValor) {
+        Map<T, Float> distancias = new HashMap<>();
+        Map<T, T> predecessores = new HashMap<>();
+
+        // Inicializa distâncias iterando na sua ListaEncadeadaArrayList
+        for (int i = 0; i < this.vertices.quantidadeNos(); i++) {
+            Vertice<T> v = this.vertices.get(i);
+            distancias.put(v.getValor(), Float.MAX_VALUE);
+            predecessores.put(v.getValor(), null);
+        }
+        distancias.put(origemValor, 0f);
+
+        PriorityQueue<Object[]> pq = new PriorityQueue<>(
+                Comparator.comparingDouble(e -> (Float) e[0])
+        );
+        pq.offer(new Object[]{0f, origemValor});
+
+        Set<T> rotulados = new HashSet<>();
+
+        while (!pq.isEmpty()) {
+            Object[] entry = pq.poll();
+            float distAtual = (Float) entry[0];
+            @SuppressWarnings("unchecked")
+            T valorAtual = (T) entry[1];
+
+            if (rotulados.contains(valorAtual)) continue;
+            rotulados.add(valorAtual);
+
+            Vertice<T> vAtual = obterVertice(valorAtual);
+            if (vAtual == null) continue;
+
+            // Navegação adaptada para usar a sua ListaEncadeadaArrayList
+            ListaEncadeadaArrayList<Aresta<T>> arestas = vAtual.getArestas();
+            for (int i = 0; i < arestas.quantidadeNos(); i++) {
+                Aresta<T> aresta = arestas.get(i);
+                T vizinhoValor = aresta.getDestino().getValor();
+
+                if (rotulados.contains(vizinhoValor)) continue;
+
+                float novaDistancia = distAtual + aresta.getTempo();
+                if (novaDistancia < distancias.get(vizinhoValor)) {
+                    distancias.put(vizinhoValor, novaDistancia);
+                    predecessores.put(vizinhoValor, valorAtual);
+                    pq.offer(new Object[]{novaDistancia, vizinhoValor});
+                }
+            }
+        }
+        return new ResultadoDijkstra<>(distancias, predecessores);
     }
 }
