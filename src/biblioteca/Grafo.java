@@ -124,6 +124,7 @@ public class Grafo<T> {
                     distancias.put(vizinhoValor, novaDistancia);
                     predecessores.put(vizinhoValor, valorAtual);
 
+
                     pq.offer(new Object[]{novaDistancia, vizinho});
                 }
             }
