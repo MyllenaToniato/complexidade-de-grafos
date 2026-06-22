@@ -1,14 +1,11 @@
 package biblioteca;
-
 import java.util.*;
 
 public class Grafo<T> {
     private final ListaEncadeadaArrayList<Vertice<T>> vertices;
-
     public Grafo() {
         this.vertices = new ListaEncadeadaArrayList<>();
     }
-
     public Vertice<T> adicionarVertice(T valor) {
         Vertice<T> existente = obterVertice(valor);
         if (existente == null) {
@@ -18,7 +15,6 @@ public class Grafo<T> {
         }
         return existente;
     }
-
     public Vertice<T> obterVertice(T valor) {
         for (int i = 0; i < this.vertices.quantidadeNos(); i++) {
             Vertice<T> v = this.vertices.get(i);
@@ -28,19 +24,15 @@ public class Grafo<T> {
         }
         return null;
     }
-
     public void adicionarAresta(T origem, T destino, float peso) {
         Vertice<T> verticeOrigem = adicionarVertice(origem);
         Vertice<T> verticeDestino = adicionarVertice(destino);
-
         Aresta<T> novaAresta = new Aresta<>(verticeDestino, peso);
         verticeOrigem.adicionarAresta(novaAresta);
     }
-
     public ListaEncadeadaArrayList<Vertice<T>> getVertices() {
         return vertices;
     }
-
     public int quantidadeVertices() {
         return vertices.quantidadeNos();
     }
@@ -74,7 +66,6 @@ public class Grafo<T> {
         return visitados;
     }
 
-    // Classe auxiliar interna para retornar os dados do Dijkstra
     public static class ResultadoDijkstra<T> {
         public final Map<T, Float> distancias;
         public final Map<T, T> predecessores;
@@ -89,20 +80,17 @@ public class Grafo<T> {
         Map<T, Float> distancias = new HashMap<>();
         Map<T, T> predecessores = new HashMap<>();
 
-        // Inicializa distâncias iterando na sua ListaEncadeadaArrayList - O(V)
         for (int i = 0; i < this.vertices.quantidadeNos(); i++) {
             Vertice<T> v = this.vertices.get(i);
             distancias.put(v.getValor(), Float.MAX_VALUE);
             predecessores.put(v.getValor(), null);
         }
 
-        // Busca o vértice inicial apenas UMA vez fora do loop principal - O(V)
         Vertice<T> inicio = obterVertice(origemValor);
         if (inicio == null) return new ResultadoDijkstra<>(distancias, predecessores);
 
         distancias.put(origemValor, 0f);
 
-        // CORREÇÃO: A PriorityQueue agora armazena o OBJETO Vertice<T> no índice [1], e não mais a chave T
         PriorityQueue<Object[]> pq = new PriorityQueue<>(
                 Comparator.comparingDouble(e -> (Float) e[0])
         );
@@ -115,21 +103,17 @@ public class Grafo<T> {
             float distAtual = (Float) entry[0];
 
             @SuppressWarnings("unchecked")
-            Vertice<T> vAtual = (Vertice<T>) entry[1]; // CORREÇÃO: Cast direto para Vertice<T>
+            Vertice<T> vAtual = (Vertice<T>) entry[1];
             T valorAtual = vAtual.getValor();
 
             if (rotulados.contains(valorAtual)) continue;
             rotulados.add(valorAtual);
 
-            // CORREÇÃO COMPLETA: A linha antiga "Vertice<T> vAtual = obterVertice(valorAtual);"
-            // que causava o gargalo O(V) foi DELETADA daqui.
 
-            // Navegação adaptada para usar a sua ListaEncadeadaArrayList
             ListaEncadeadaArrayList<Aresta<T>> arestas = vAtual.getArestas();
             for (int i = 0; i < arestas.quantidadeNos(); i++) {
                 Aresta<T> aresta = arestas.get(i);
 
-                // CORREÇÃO: Pegamos o objeto do vértice destino diretamente da aresta
                 Vertice<T> vizinho = aresta.getDestino();
                 T vizinhoValor = vizinho.getValor();
 
@@ -140,7 +124,6 @@ public class Grafo<T> {
                     distancias.put(vizinhoValor, novaDistancia);
                     predecessores.put(vizinhoValor, valorAtual);
 
-                    // CORREÇÃO: Ofertamos o objeto 'vizinho' (Vertice<T>) para a fila
                     pq.offer(new Object[]{novaDistancia, vizinho});
                 }
             }
